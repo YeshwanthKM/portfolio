@@ -1,6 +1,7 @@
 import React from 'react';
 import { ABOUT_ME } from '../data/portfolioData';
 import { Award, GraduationCap, MapPin, Sparkles } from 'lucide-react';
+import aboutIllustration from '../assets/about_illustration.svg';
 
 export const About: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ export const About: React.FC = () => {
             {/* Visual white border accent */}
             <div className="absolute inset-2 rounded-2xl border-2 border-dashed border-neutral-700 pointer-events-none" />
             <img
-              src="/assets/about_illustration.svg"
+              src={aboutIllustration}
               alt="About Yeshwanth KM illustration"
               className="relative z-10 w-full h-auto max-h-[480px] object-contain drop-shadow-lg transition-transform duration-500 hover:scale-105"
             />

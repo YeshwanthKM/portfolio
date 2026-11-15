@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { Github, Linkedin, Mail, MapPin, ArrowDown, Sparkles } from 'lucide-react';
+import heroIllustration from '../assets/hero_illustration.svg';
 
 export const Hero: React.FC = () => {
   const titles = [
@@ -159,7 +160,7 @@ export const Hero: React.FC = () => {
 
             {/* Main Illustration */}
             <img
-              src="/assets/hero_illustration.svg"
+              src={heroIllustration}
               alt="Developer working on laptop illustration"
               className="relative z-10 w-full h-auto max-h-[500px] object-contain drop-shadow-sm transition-transform duration-500 hover:scale-105"
             />
