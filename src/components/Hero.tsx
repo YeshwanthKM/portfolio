@@ -42,7 +42,7 @@ export const Hero: React.FC = () => {
       id="hero"
       className="bg-primary-white px-5 sm:px-8 md:px-12 lg:px-20 xl:px-28 py-10 md:py-16 lg:py-20"
     >
-      <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-8">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-8">
         {/* Left Column: Text & Content */}
         <div className="flex flex-col gap-6 lg:gap-8 lg:w-1/2">
           {/* Status Badge */}
@@ -62,9 +62,12 @@ export const Hero: React.FC = () => {
               </span>
             </h1>
 
-            <p className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold text-black leading-tight">
-              Computer Science & Engineering
-            </p>
+            <div className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold text-black leading-tight">
+              <span className="block sm:inline">Computer Science & </span>
+              <span className="clean-outline-text font-extrabold inline-block">
+                Engineering
+              </span>
+            </div>
 
             <div className="flex flex-wrap items-center gap-2 text-xl sm:text-3xl md:text-4xl font-bold min-h-[40px] pt-1">
               <span className="text-neutral-500 font-medium text-lg sm:text-2xl md:text-3xl">Focusing on:</span>

@@ -85,7 +85,7 @@ export const Contact: React.FC = () => {
             <div className="flex flex-col gap-6">
               <h3 className="text-3xl sm:text-4xl lg:text-5xl/[117%] font-extrabold tracking-tight text-black leading-tight">
                 Let's{' '}
-                <span className="text-stroke-1 sm:text-stroke-2 text-stroke-primary-black text-primary-white px-2">
+                <span className="clean-outline-text font-extrabold px-2">
                   talk
                 </span>{' '}
                 for <br className="hidden sm:inline" />
