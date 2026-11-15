@@ -1,22 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export const CustomCursor: React.FC = () => {
-  const [position, setPosition] = useState({ x: -100, y: -100 });
+  const cursorRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Only enable custom cursor on non-touch desktop screens
-    if (window.matchMedia('(pointer: fine)').matches) {
-      setIsVisible(true);
+    // Only activate custom cursor on devices that support a fine pointer (desktop / mouse)
+    if (!window.matchMedia('(pointer: fine)').matches) {
+      return;
     }
 
-    const updateCursorPosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+    let targetX = -100;
+    let targetY = -100;
+    let currentX = -100;
+    let currentY = -100;
+    let rafId: number;
+    let hasMoved = false;
+
+    const onMouseMove = (e: MouseEvent) => {
+      targetX = e.clientX;
+      targetY = e.clientY;
+
+      if (!hasMoved) {
+        currentX = targetX;
+        currentY = targetY;
+        hasMoved = true;
+        setIsVisible(true);
+      }
     };
 
-    const handleMouseOver = (e: MouseEvent) => {
+    const onMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (
         target?.closest('a') ||
@@ -32,38 +46,58 @@ export const CustomCursor: React.FC = () => {
       }
     };
 
-    const handleMouseLeaveWindow = () => {
+    const onMouseLeave = () => {
       setIsVisible(false);
     };
 
-    const handleMouseEnterWindow = () => {
+    const onMouseEnter = () => {
       setIsVisible(true);
     };
 
-    window.addEventListener('mousemove', updateCursorPosition);
-    window.addEventListener('mouseover', handleMouseOver);
-    document.addEventListener('mouseleave', handleMouseLeaveWindow);
-    document.addEventListener('mouseenter', handleMouseEnterWindow);
+    // 60-120fps hardware-accelerated animation loop
+    const animate = () => {
+      // Smooth linear interpolation (lerp)
+      const ease = 0.35;
+      currentX += (targetX - currentX) * ease;
+      currentY += (targetY - currentY) * ease;
+
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+      }
+
+      rafId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener('mouseover', onMouseOver, { passive: true });
+    document.addEventListener('mouseleave', onMouseLeave);
+    document.addEventListener('mouseenter', onMouseEnter);
+
+    rafId = requestAnimationFrame(animate);
 
     return () => {
-      window.removeEventListener('mousemove', updateCursorPosition);
-      window.removeEventListener('mouseover', handleMouseOver);
-      document.removeEventListener('mouseleave', handleMouseLeaveWindow);
-      document.removeEventListener('mouseenter', handleMouseEnterWindow);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseover', onMouseOver);
+      document.removeEventListener('mouseleave', onMouseLeave);
+      document.removeEventListener('mouseenter', onMouseEnter);
+      cancelAnimationFrame(rafId);
     };
-  }, [isVisible]);
+  }, []);
 
-  if (!isVisible) return null;
-
-  const currentSize = isHovered ? 56 : 30;
+  const size = isHovered ? 52 : 28;
 
   return (
     <div
-      className="fixed top-0 left-0 pointer-events-none z-50 rounded-full bg-white mix-blend-exclusion transition-all duration-100 ease-out"
+      ref={cursorRef}
+      className={`fixed top-0 left-0 pointer-events-none z-50 rounded-full bg-white mix-blend-exclusion will-change-transform ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
       style={{
-        width: `${currentSize}px`,
-        height: `${currentSize}px`,
-        transform: `translate3d(${position.x - currentSize / 2}px, ${position.y - currentSize / 2}px, 0)`,
+        width: `${size}px`,
+        height: `${size}px`,
+        // Transitions ONLY for sizing and opacity, NEVER for movement transform!
+        transition: 'width 0.22s cubic-bezier(0.2, 1, 0.3, 1), height 0.22s cubic-bezier(0.2, 1, 0.3, 1), opacity 0.15s ease-out',
+        transform: 'translate3d(-100px, -100px, 0) translate(-50%, -50%)',
       }}
     />
   );
