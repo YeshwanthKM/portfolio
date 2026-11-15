@@ -191,9 +191,9 @@ export const COMMUNITY_EVENTS: CommunityEvent[] = [
     description: "Attended full-day technical sessions, tech talks on developer ecosystems, cloud architectures, and machine learning tracks."
   },
   {
-    title: "GDG DevFest Chennai",
+    title: "GDG DevFest Chennai 2026",
     organization: "Google Developer Groups Chennai",
-    dateOrYear: "Community Event",
+    dateOrYear: "2026",
     type: "DevFest Conference",
     description: "Engaged with the regional developer community, attending keynotes and developer demonstrations on modern software engineering."
   },
