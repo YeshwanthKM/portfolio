@@ -18,6 +18,13 @@
     background-color: #000000;
     color: #ffffff;
   }
+
+  /* Hide default mouse pointer on desktop screens so only the custom circle is visible */
+  @media (pointer: fine) {
+    *, *::before, *::after, html, body, a, button, input, textarea, select {
+      cursor: none !important;
+    }
+  }
 }
 
 @layer utilities {
