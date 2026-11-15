@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData';
-import { Mail, Github, Linkedin, MapPin, Send, CheckCircle2, ArrowUpRight, Copy, Check, ExternalLink } from 'lucide-react';
+import { Mail, Github, Linkedin, MapPin, Send, CheckCircle2, ArrowUpRight, Copy, Check, ExternalLink, Loader2, Info } from 'lucide-react';
 
 export const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +10,7 @@ export const Contact: React.FC = () => {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'activation' | 'error'>('idle');
   const [copied, setCopied] = useState(false);
 
   const handleCopyEmail = () => {
@@ -25,18 +25,12 @@ export const Contact: React.FC = () => {
     return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(PERSONAL_INFO.email)}&su=${su}&body=${bo}`;
   };
 
-  const getMailtoUrl = (subject?: string, body?: string) => {
-    const su = encodeURIComponent(subject || 'Connect Request');
-    const bo = encodeURIComponent(body || 'Hi Yeshwanth,\n\n');
-    return `mailto:${PERSONAL_INFO.email}?subject=${su}&body=${bo}`;
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmissionStatus('idle');
 
     try {
-      // Send form data asynchronously via Formsubmit AJAX endpoint
       const response = await fetch(`https://formsubmit.co/ajax/${PERSONAL_INFO.email}`, {
         method: 'POST',
         headers: {
@@ -48,21 +42,23 @@ export const Contact: React.FC = () => {
           email: formData.email,
           subject: formData.subject || 'Portfolio Contact Message',
           message: formData.message,
-          _subject: `New Message from ${formData.name} via Portfolio`
+          _subject: `New Message from ${formData.name} via Portfolio`,
+          _captcha: 'false',
+          _template: 'table'
         })
       });
 
-      if (response.ok) {
-        setSubmitted(true);
+      const data = await response.json();
+
+      if (data.success === 'true' || response.ok) {
+        setSubmissionStatus('success');
+      } else if (data.message && data.message.toLowerCase().includes('activation')) {
+        setSubmissionStatus('activation');
       } else {
-        // Fallback: mark submitted and launch prefilled email
-        setSubmitted(true);
-        window.open(getGmailUrl(formData.subject, `From: ${formData.name} (${formData.email})\n\n${formData.message}`), '_blank');
+        setSubmissionStatus('error');
       }
     } catch {
-      // Offline or network block fallback
-      setSubmitted(true);
-      window.open(getGmailUrl(formData.subject, `From: ${formData.name} (${formData.email})\n\n${formData.message}`), '_blank');
+      setSubmissionStatus('error');
     } finally {
       setIsSubmitting(false);
     }
@@ -121,7 +117,7 @@ export const Contact: React.FC = () => {
                     </p>
                     <div className="flex flex-wrap items-center gap-2">
                       <a
-                        href={getMailtoUrl()}
+                        href={`mailto:${PERSONAL_INFO.email}`}
                         className="text-base font-bold text-black hover:underline break-all"
                       >
                         {PERSONAL_INFO.email}
@@ -208,40 +204,84 @@ export const Contact: React.FC = () => {
                 Send a Message
               </h4>
 
-              {submitted ? (
+              {submissionStatus === 'success' && (
                 <div className="bg-emerald-50 border-2 border-emerald-500 rounded-xl p-6 text-center space-y-4">
                   <CheckCircle2 className="w-12 h-12 text-emerald-600 mx-auto" />
                   <h5 className="text-lg font-bold text-emerald-900">
                     Message Sent Successfully!
                   </h5>
                   <p className="text-sm text-emerald-800 leading-relaxed max-w-md mx-auto">
-                    Thank you for reaching out, {formData.name || 'friend'}! Your message has been routed to{' '}
-                    <strong className="underline">{PERSONAL_INFO.email}</strong>.
+                    Thank you for reaching out, {formData.name || 'friend'}! Your message has been sent directly to{' '}
+                    <strong className="underline">{PERSONAL_INFO.email}</strong>. I will get back to you soon.
                   </p>
 
-                  <div className="pt-3 flex flex-wrap justify-center gap-3">
+                  <button
+                    onClick={() => {
+                      setSubmissionStatus('idle');
+                      setFormData({ name: '', email: '', subject: '', message: '' });
+                    }}
+                    className="mt-2 px-5 py-2.5 bg-black text-white text-xs font-bold rounded-md hover:bg-neutral-800 transition-colors"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
+              )}
+
+              {submissionStatus === 'activation' && (
+                <div className="bg-amber-50 border-2 border-amber-400 rounded-xl p-6 text-center space-y-4">
+                  <Info className="w-12 h-12 text-amber-600 mx-auto" />
+                  <h5 className="text-lg font-bold text-amber-900">
+                    Form Activation Required (First Time Only)
+                  </h5>
+                  <p className="text-xs sm:text-sm text-amber-800 leading-relaxed max-w-md mx-auto">
+                    FormSubmit has sent a one-time verification email to <strong>{PERSONAL_INFO.email}</strong>.
+                    <br />
+                    Please open your email and click <strong>"Activate Form"</strong>. Once clicked, all future messages from this form will immediately deliver to your inbox!
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap justify-center gap-2">
                     <a
-                      href={getGmailUrl(formData.subject, `Hi Yeshwanth,\n\nFollowing up on my message:\n${formData.message}`)}
+                      href={getGmailUrl(formData.subject, `From: ${formData.name} (${formData.email})\n\n${formData.message}`)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-md font-bold text-xs hover:bg-neutral-800 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-black text-white text-xs font-bold rounded-md hover:bg-neutral-800 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" />
+                      <span>Send directly via Gmail Web</span>
+                    </a>
+                  </div>
+                </div>
+              )}
+
+              {submissionStatus === 'error' && (
+                <div className="bg-red-50 border-2 border-red-400 rounded-xl p-6 text-center space-y-4">
+                  <h5 className="text-lg font-bold text-red-900">
+                    Could Not Send Automatically
+                  </h5>
+                  <p className="text-xs sm:text-sm text-red-700 leading-relaxed max-w-md mx-auto">
+                    No worries! You can send your message directly using Gmail Web or by copying the email address.
+                  </p>
+                  <div className="pt-2 flex flex-wrap justify-center gap-3">
+                    <a
+                      href={getGmailUrl(formData.subject, `From: ${formData.name} (${formData.email})\n\n${formData.message}`)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-black text-white text-xs font-bold rounded-md hover:bg-neutral-800"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Open in Gmail (Web)</span>
                     </a>
-
                     <button
-                      onClick={() => {
-                        setSubmitted(false);
-                        setFormData({ name: '', email: '', subject: '', message: '' });
-                      }}
-                      className="px-4 py-2 bg-white border border-neutral-300 text-neutral-800 text-xs font-bold rounded-md hover:border-black transition-colors"
+                      onClick={() => setSubmissionStatus('idle')}
+                      className="px-4 py-2.5 bg-white border border-neutral-300 text-neutral-800 text-xs font-bold rounded-md hover:border-black"
                     >
-                      Send Another Message
+                      Try Again
                     </button>
                   </div>
                 </div>
-              ) : (
+              )}
+
+              {submissionStatus === 'idle' && (
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <div>
                     <label htmlFor="name" className="block text-xs font-bold uppercase tracking-wider text-neutral-700 mb-1">
@@ -308,12 +348,21 @@ export const Contact: React.FC = () => {
                     disabled={isSubmitting}
                     className="mt-2 w-full flex-center gap-2 bg-black text-white py-3.5 px-6 rounded border-2 border-black font-bold text-sm tracking-wide transition-all duration-200 hover:bg-neutral-800 active:translate-y-0.5 shadow-sm disabled:opacity-50"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>{isSubmitting ? 'Sending Message...' : 'Get In Touch'}</span>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Sending Message...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Get In Touch</span>
+                      </>
+                    )}
                   </button>
 
                   <p className="text-[11px] text-neutral-500 text-center mt-1">
-                    Directly delivered to <span className="font-semibold text-neutral-800">{PERSONAL_INFO.email}</span>
+                    Directly sent to <span className="font-semibold text-neutral-800">{PERSONAL_INFO.email}</span>
                   </p>
                 </form>
               )}
