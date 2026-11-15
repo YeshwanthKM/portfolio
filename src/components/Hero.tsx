@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PERSONAL_INFO } from '../data/portfolioData';
-import { Github, Linkedin, Mail, MapPin, ArrowDown, Sparkles } from 'lucide-react';
+import { Github, Linkedin, Mail, MapPin, ArrowDown } from 'lucide-react';
 import heroIllustration from '../assets/hero_illustration.svg';
 
 export const Hero: React.FC = () => {
@@ -141,11 +141,10 @@ export const Hero: React.FC = () => {
               </a>
 
               <a
-                href="#achievements"
-                className="inline-flex items-center gap-2 bg-neutral-100 text-black px-4 py-3 rounded border-2 border-neutral-300 font-bold text-sm tracking-wide transition-all duration-200 hover:border-black hover:bg-neutral-200 active:translate-y-0.5"
+                href="#contact"
+                className="inline-flex items-center gap-2 bg-neutral-100 text-black px-5 py-3 rounded border-2 border-neutral-300 font-bold text-sm tracking-wide transition-all duration-200 hover:border-black hover:bg-white active:translate-y-0.5"
               >
-                <Sparkles className="w-4 h-4 text-amber-500" />
-                <span>1st Prize Winner</span>
+                <span>Get In Touch</span>
               </a>
             </div>
           </div>

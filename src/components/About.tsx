@@ -1,6 +1,6 @@
 import React from 'react';
 import { ABOUT_ME } from '../data/portfolioData';
-import { Award, GraduationCap, MapPin, Sparkles } from 'lucide-react';
+import { Brain, GraduationCap, MapPin, Sparkles } from 'lucide-react';
 import aboutIllustration from '../assets/about_illustration.svg';
 
 export const About: React.FC = () => {
@@ -51,10 +51,10 @@ export const About: React.FC = () => {
             </div>
 
             <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 flex items-center gap-3">
-              <Award className="w-5 h-5 text-amber-400 shrink-0" />
+              <Brain className="w-5 h-5 text-amber-400 shrink-0" />
               <div>
-                <p className="text-[11px] font-mono text-neutral-400 uppercase">Achievement</p>
-                <p className="text-sm font-bold text-white">1st Prize Web Challenge</p>
+                <p className="text-[11px] font-mono text-neutral-400 uppercase">Specialization</p>
+                <p className="text-sm font-bold text-white">AI & Machine Learning</p>
               </div>
             </div>
 
