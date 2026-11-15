@@ -41,7 +41,7 @@ export const About: React.FC = () => {
           </div>
 
           {/* Quick Highlights Grid */}
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-neutral-800">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 pt-4 border-t border-neutral-800">
             <div className="bg-neutral-900 border border-neutral-800 rounded-xl p-4 flex items-center gap-3">
               <GraduationCap className="w-5 h-5 text-emerald-400 shrink-0" />
               <div>

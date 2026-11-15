@@ -46,36 +46,35 @@ export const Hero: React.FC = () => {
         {/* Left Column: Text & Content */}
         <div className="flex flex-col gap-6 lg:gap-8 lg:w-1/2">
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-2 self-start bg-neutral-100 border border-neutral-300 rounded-full px-3.5 py-1.5 text-xs font-semibold text-neutral-800">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>2nd Year B.E. CSE (AI & ML) @ Rajalakshmi Institute of Technology</span>
+          <div className="inline-flex items-center gap-2 self-start bg-neutral-100 border border-neutral-300 rounded-full px-3.5 py-1.5 text-xs font-semibold text-neutral-800 max-w-full">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 animate-pulse" />
+            <span className="leading-tight">
+              2nd Year B.E. CSE (AI & ML) @ Rajalakshmi Institute of Technology
+            </span>
           </div>
 
-          {/* Large Typography matching Figma template */}
-          <div className="flex flex-col gap-2 sm:gap-3 text-3xl sm:text-4xl md:text-5xl lg:text-5xl/[117%] font-normal tracking-tight text-primary-black">
-            <h1>
+          {/* Large Typography */}
+          <div className="flex flex-col gap-2 sm:gap-3 text-primary-black">
+            <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-normal tracking-tight text-primary-black leading-tight">
               <span>Hello, I'm</span>{' '}
-              <span className="font-extrabold text-black block sm:inline">
+              <span className="font-extrabold text-black whitespace-nowrap">
                 {PERSONAL_INFO.name}
               </span>
             </h1>
 
-            <p className="flex flex-wrap items-baseline gap-2">
-              <span className="font-extrabold">Computer Science &</span>
-              <span className="font-extrabold text-primary-white text-stroke-1 sm:text-stroke-2 text-stroke-primary-black">
-                Engineering
-              </span>
+            <p className="text-2xl sm:text-4xl md:text-5xl lg:text-5xl font-extrabold text-black leading-tight">
+              Computer Science & Engineering
             </p>
 
-            <div className="flex flex-wrap items-center gap-2 text-2xl sm:text-3xl md:text-4xl font-bold min-h-[44px]">
-              <span className="text-neutral-600">Focusing on:</span>
-              <span className="text-black font-extrabold underline decoration-2 decoration-black underline-offset-4">
+            <div className="flex flex-wrap items-center gap-2 text-xl sm:text-3xl md:text-4xl font-bold min-h-[40px] pt-1">
+              <span className="text-neutral-500 font-medium text-lg sm:text-2xl md:text-3xl">Focusing on:</span>
+              <span className="text-black font-extrabold border-b-2 border-black pb-0.5">
                 {displayText}
                 <span className="animate-pulse">|</span>
               </span>
             </div>
 
-            <p className="flex items-center gap-2 text-base sm:text-lg font-medium text-neutral-600 pt-1">
+            <p className="flex items-center gap-2 text-sm sm:text-base font-medium text-neutral-600 pt-1">
               <MapPin className="w-4 h-4 text-black shrink-0" />
               <span>Based in <strong className="text-black font-bold">Chennai, Tamil Nadu, India</strong></span>
             </p>
@@ -131,10 +130,10 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Quick Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <a
                 href="#projects"
-                className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded border-2 border-black font-bold text-sm tracking-wide transition-all duration-200 hover:bg-transparent hover:text-black active:translate-y-0.5 shadow-sm"
+                className="inline-flex items-center gap-2 bg-black text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded border-2 border-black font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 hover:bg-transparent hover:text-black active:translate-y-0.5 shadow-sm"
               >
                 <span>View Projects</span>
                 <ArrowDown className="w-4 h-4" />
@@ -142,7 +141,7 @@ export const Hero: React.FC = () => {
 
               <a
                 href="#contact"
-                className="inline-flex items-center gap-2 bg-neutral-100 text-black px-5 py-3 rounded border-2 border-neutral-300 font-bold text-sm tracking-wide transition-all duration-200 hover:border-black hover:bg-white active:translate-y-0.5"
+                className="inline-flex items-center gap-2 bg-neutral-100 text-black px-4 sm:px-5 py-2.5 sm:py-3 rounded border-2 border-neutral-300 font-bold text-xs sm:text-sm tracking-wide transition-all duration-200 hover:border-black hover:bg-white active:translate-y-0.5"
               >
                 <span>Get In Touch</span>
               </a>
