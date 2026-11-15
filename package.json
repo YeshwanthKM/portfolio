@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "vite index.dev.html",
+    "build": "tsc && vite build && cp dist/index.dev.html dist/index.html && rm -rf docs && cp -r dist docs && cp dist/index.html index.html && rm -rf assets && cp -r dist/assets assets",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"

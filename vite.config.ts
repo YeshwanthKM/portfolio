@@ -5,9 +5,15 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/portfolio/',
+  build: {
+    rollupOptions: {
+      input: 'index.dev.html'
+    }
+  },
   server: {
     port: 5173,
     host: true
   }
 });
+
 
